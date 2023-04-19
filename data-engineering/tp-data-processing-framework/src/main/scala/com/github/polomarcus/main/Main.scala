@@ -19,16 +19,16 @@ object Main {
     // Read a JSON data source with the path "./data-news-json"
     // Tips : https://spark.apache.org/docs/latest/sql-data-sources-json.html
     val pathToJsonData = "./data-news-json/"
-    val newsDataframe: DataFrame = ??? //@TODO
+    //val newsDataframe: DataFrame = spark.read.json(pathToJsonData) //
 
     // To type our dataframe as News, we can use the Dataset API : https://spark.apache.org/docs/latest/sql-getting-started.html#creating-datasets
     val newsDatasets: Dataset[News] = NewsService.read(pathToJsonData)
 
     // print the dataset schema - tips : https://spark.apache.org/docs/latest/sql-getting-started.html#untyped-dataset-operations-aka-dataframe-operations
-    //@TODO newsDatasets.???
+    newsDatasets.printSchema()
 
     // Show the first 10 elements - tips : https://spark.apache.org/docs/latest/sql-getting-started.html#creating-dataframes
-    //@TODO newsDatasets.???
+    newsDatasets.show(10)
 
     // Enrich the dataset by apply the ClimateService.isClimateRelated function to the title and the description of a news
     // a assign this value to the "containsWordGlobalWarming" attribute
@@ -36,6 +36,7 @@ object Main {
 
     // From now, we'll use only the Dataset API as it's more convenient
     val filteredNewsAboutClimate = NewsService.filterNews(enrichedDataset)
+
     // Count how many tv news we have in our data source
     val count = NewsService.getNumberOfNews(newsDatasets)
     logger.info(s"We have ${count} news in our dataset")
